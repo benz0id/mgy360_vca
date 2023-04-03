@@ -1,0 +1,2 @@
+#CHROM,POS,ID,REF,ALT,QUAL,FILTER,INFO,FORMAT,/home/rothlab/dtabet/MGY360/output/mgyN21a/mgyN21a_S178_R1_001_sorted.bam,CDS(Orientation)
+chrIV,1303715,.,T,C,12.27,.,"DP=2;SGB=-0.379885;MQ0F=0;AF1=1;AC1=1;DP4=0,0,1,0;MQ=42;FQ=-999",GT:PL,"1:42,0",YDR419W(+)

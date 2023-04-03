@@ -1,0 +1,280 @@
+"0","csvs <- list.files('all_variant_calls')"
+"0","variant_call_dfs <- list()"
+"0",""
+"0","# Parse all variant calls."
+"0","for (i in seq_along(csvs)){"
+"0","  csv_name <- csvs[i]"
+"0","  csv_path <- paste('all_variant_calls/', csv_name, collapse = '', sep='')"
+"0","  print(csv_path)"
+"0","  csv_org <- read_csv(csv_path)"
+"0","  csv_formatted <- data.frame(chr=csv_org$`#CHROM`, pos = csv_org$POS, org=csv_org$REF,"
+"0","                   mut=csv_org$ALT)"
+"0","  variant_call_dfs[i] <- list(csv_formatted)"
+"0","}"
+"1","[1]"
+"1"," ""all_variant_calls/mgy11_S102_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m252[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy21_S101_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m266[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy33_S100_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m253[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy51_S53_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m248[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy61_S150_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m2[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy71_S60_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m289[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy72_S110_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m247[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy82_S103_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m273[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgy91_S63_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m246[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyA13_S108_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m281[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyA31_S52_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m268[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyANC12_S127_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m240[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyANC13_S131_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m210[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyB11_S254_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m296[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyB22_S158_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m272[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyB31_S230_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m259[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyD11_S243_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m239[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyD32_S174_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m265[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyD33_S247_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m245[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyH12_S126_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m276[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyH22_S130_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m0[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (11): #CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, /home/rothlab/dtabet..."
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyH31_S134_R1_001_analyzed.csv"""
+"1","
+"
+"2","[1mRows: [22m[34m259[39m [1mColumns: [22m[34m11[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (9): #CHROM, ID, REF, ALT, FILTER, INFO, FORMAT, /home/rothlab/dtabet/MGY360/outp...
+[32mdbl[39m (2): POS, QUAL"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"1","[1]"
+"1"," ""all_variant_calls/mgyJ11_S175_R1_001_analyzed.csv"""
+"1","
+"

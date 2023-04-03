@@ -1,0 +1,5 @@
+"0","orf_stats <- orf_stats[order(orf_stats$num_unique)]
+"
+"2","Error in `[.data.frame`(orf_stats, order(orf_stats$num_unique)) : 
+  undefined columns selected
+"

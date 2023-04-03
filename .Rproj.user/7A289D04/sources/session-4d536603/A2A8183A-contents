@@ -1,0 +1,301 @@
+---
+title: "Assignment 2"
+author: "Benjamin Tudor Price | TUDORPR1"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+bibliography: refs.bib
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/research-institute-for-nature-and-forest.csl
+---
+
+## Format Variants 
+```{r}
+get_variant_types <- function(org, mut){
+  # Returns the class of mutation given the original and mutant variants.
+  muts <- unlist(strsplit(mut, split = ','))
+  types <- character()
+  
+  if (all(nchar(muts) == nchar(org))){
+    return('substitution')
+  }
+  
+  if (any(nchar(muts) > nchar(org))){
+    types <- c(types, 'insertion')
+  }
+  
+  if (any(nchar(muts) < nchar(org))){
+    types <- c(types, 'deletion')
+  }
+  
+  if (any(nchar(muts) - nchar(org) %% 3 != 0)){
+    types <- c(types, 'frameshift')
+  }
+  
+  return(types)
+}
+
+to_igv_coords <- function(chr, pos){
+  # Get IGV Coords.
+  return(paste0(c(chr, ':', as.character(pos)), collapse='', sep=''))
+}
+
+
+library(readr)
+vars_org <- read_csv("mgy21_S101_R1_001_analyzed.csv")
+vars <- data.frame(chr=vars_org$`#CHROM`, pos = vars_org$POS, org=vars_org$REF,
+                   mut=vars_org$ALT, qual=vars_org$QUAL)
+
+vars$coords <- c()
+for (i in seq_along(vars$chr)){
+  vars$coords[i] <- to_igv_coords(vars$chr[i], vars$pos[i])
+}
+
+muts <- list()
+
+for (i in seq_along(vars$chr)){
+  muts[i] <-  list(get_variant_types(vars$org[i], vars$mut[i]))
+}
+
+is_of_mut_type <- function(types, mut){
+  # Return whether each mut types in <types> is of type <mut>.
+  return(unlist(lapply(types, function(x){mut %in% x})))
+}
+
+num_insertion <- sum(is_of_mut_type(muts, 'insertion'))
+num_substitution <- sum(is_of_mut_type(muts, 'substitution'))
+num_deletion <- sum(is_of_mut_type(muts, 'deletion'))
+num_pot_framshift <- sum(is_of_mut_type(muts, 'frameshift'))
+
+```
+
+
+# Get ORFs and Their Positions
+```{r}
+
+library(seqinr)
+orfs <- read.fasta(file = "orf_trans.fasta",
+  seqtype = c("AA"), set.attributes = FALSE, legacy.mode = TRUE, seqonly = FALSE, 
+  whole.header = TRUE)
+
+get_row <- function(orf_desc){
+  orf_attrs <- unlist(strsplit(orf_desc[[1]], ','))
+  gene_info <- unlist(strsplit(orf_attrs[1], ' '))
+  
+  orf_name <- gene_info[1]
+  gene_name <- gene_info[2]
+  
+  loc_info <- unlist(strsplit(orf_attrs[2], ' '))
+  
+  chr <- paste(c('chr', loc_info[3]), sep='', collapse = '')
+  pos_info <-  as.integer(unlist(strsplit(loc_info[5], '-')))
+  start <- min(pos_info)
+  stop <- max(pos_info)
+  
+  return(list(orf_name, gene_name, chr, start, stop))
+}
+orf_df <- do.call(rbind.data.frame, lapply(names(orfs), get_row))
+names(orf_df) <- c('orf', 'name', 'chr', 'start', 'stop')
+names(orfs) <- c()
+orf_df$seq <- lapply(orfs, paste0, sep='', collapse ='')
+
+```
+
+
+## Find ORFs which Increase Resistance when knocked out
+```{r}
+rep1 <- read_csv("Bicarb Assays/Rep1.csv")
+rep2 <- read_csv("Bicarb Assays/Rep2.csv")
+rep3 <- read_csv("Bicarb Assays/Rep3.csv")
+
+sel <- ! is.na(rep1$Score) & ! is.na(as.numeric(rep2$Score)) & ! is.na(rep3$Score)
+
+delta <- (rep1[sel,]$Score + as.numeric(rep2[sel,]$Score) + rep3[sel,]$Score) / 3
+
+null_effects <- data.frame(orf=rep1$`Array ORF`[sel], 
+                           gene_name=rep1$`Array Name`[sel],
+                           delta=delta)
+
+for (i in seq_along(orf_df$name)){
+  orf_id <- orf_df$orf[i]
+  sel <- null_effects$orf == orf_id
+  if (sum(sel) > 1){
+    orf_df$null_effects[i] <- mean(null_effects$delta[sel])
+  }
+  else if (sum(sel) == 0){
+    orf_df$null_effects[i] <- NA
+  }
+  else{
+  orf_df$null_effects[i] <- null_effects$delta[sel]
+  }
+}
+
+```
+
+## Find All Variants that Lie in ORFs
+```{r}
+for (var_ind in seq_along(vars$chr)){
+  var_chr <- vars$chr[var_ind]
+  var_pos <- vars$pos[var_ind]
+  
+  matching_orfs <- which(orf_df$chr == var_chr & 
+                         orf_df$start <= var_pos &
+                         var_pos <= orf_df$stop)
+  orf_names <- orf_df$name[matching_orfs]
+  orf_names <- paste0(orf_names, collapse = ', ')
+  vars$orfs[var_ind] <- orf_names
+  vars$null_effects[var_ind] <- mean(orf_df$null_effects[matching_orfs])
+}
+
+mut_counts <- table(vars$orfs)
+mut_counts <- mut_counts[order(mut_counts, decreasing = TRUE)][2:length(mut_counts)]
+
+
+library(knitr)
+kable(mut_counts, col.names = c('Gene Name', '# of Variants'))
+
+var_orfs <- data.frame(ORF=names(mut_counts),
+                       `# of Variants`=mut_counts,
+                       `mut_effect`=orf_df$null_effects[match(names(mut_counts), orf_df$name)])
+
+write_csv(data.frame(ORF=names(mut_counts),
+                     `# of Variants`=mut_counts),
+          '2-1_variants.csv')
+```
+
+
+## Sequences of Notable ORFs
+```{r}
+num_names <- 4
+
+notable_gene_names <- names(mut_counts)[1:(num_names + 1)]
+sel <- match(notable_gene_names, orf_df$name)
+seqs <- orf_df$seq[sel]
+
+notable_genes <- data.frame(name=notable_gene_names, seq=unlist(seqs))
+
+for (i in seq_along(notable_genes$name)){
+  ind <- sel[i]
+  notable_genes$loc[i] <-  to_igv_coords(orf_df$chr[ind], orf_df$start[ind])
+}
+
+```
+
+
+## Analysis of all Replicates Runs
+```{r}
+csvs <- list.files('all_variant_calls')
+variant_call_dfs <- list()
+
+# Parse all variant calls.
+for (i in seq_along(csvs)){
+  csv_name <- csvs[i]
+  csv_path <- paste('all_variant_calls/', csv_name, collapse = '', sep='')
+  print(csv_path)
+  csv_org <- read_csv(csv_path)
+  csv_formatted <- data.frame(chr=csv_org$`#CHROM`, pos = csv_org$POS, org=csv_org$REF,
+                   mut=csv_org$ALT)
+  variant_call_dfs[i] <- list(csv_formatted)
+}
+
+install.packages("dplyr")
+library(dplyr)
+
+# Get all unique mutations.
+all_muts <- do.call(rbind.data.frame, variant_call_dfs)
+unique_muts <- distinct(all_muts)
+
+# Count copies across datasets.
+copies <- numeric(nrow(unique_muts))
+for (i in seq(1, nrow(unique_muts))){
+  mut <- trimws(unique_muts[i,])
+  
+  copies[i] <- sum(apply(all_muts, MARGIN=1, FUN = function(x){all(trimws(x)==mut)}))
+  print(i)
+  print(copies[i])
+}
+
+# Order by position, then number of counts.
+unique_muts$copies <- copies
+unique_muts <- unique_muts[order(unique_muts$pos),]
+unique_muts <- unique_muts[order(unique_muts$chr),]
+
+# Find mutations that map to specific orfs.
+for (var_ind in seq_along(unique_muts$chr)){
+  var_chr <- unique_muts$chr[var_ind]
+  var_pos <- unique_muts$pos[var_ind]
+  
+  matching_orfs <- which(orf_df$chr == var_chr & 
+                         orf_df$start <= var_pos &
+                         var_pos <= orf_df$stop)
+  orf_names <- orf_df$name[matching_orfs]
+  orf_names <- paste0(orf_names, collapse = ', ')
+  unique_muts$orfs[var_ind] <- orf_names
+  unique_muts$null_effects[var_ind] <- mean(orf_df$null_effects[matching_orfs])
+}
+
+orf_to_counts <- c()
+orf_names <- unique(unique_muts$orfs)
+
+for (i in seq_along(orf_names)){
+  orf <- orf_names[i]
+  sel <- unique_muts$orfs == orf
+  orf_to_counts[i] <- sum(unique_muts$copies[sel])
+  names(orf_to_counts)[i] <- orf
+}
+names(orf_to_counts)[which(names(orf_to_counts) == '')] <- 'Not in an ORF'
+orf_to_counts <- orf_to_counts[order(orf_to_counts, decreasing = TRUE)]
+
+hist(unique_muts$copies, main='Histogram of Copy Number', xlab = 'Number of Copies Across all Students', ylab="Variants")
+write_csv(unique_muts, 'Unique Variants.csv')
+
+
+```
+
+
+## Filter Likely G0 Variants
+```{r}
+orf_names <- names(orf_to_counts)
+orf_stats <- data.frame(name=character(), 
+                        num_dups=numeric(), 
+                        num_unique=numeric())
+
+dup_threshold <- 10
+
+for (name in orf_names){
+  if (name == 'Not in an ORF'){
+    sel <- unique_muts$orfs == ""
+    null_effect <- NA
+  }
+  else {
+    sel <- unique_muts$orfs == name
+    null_effect <- mean(orf_df$null_effects[orf_df$name == name])
+  }
+  
+  dups <- unique_muts$copies[sel] >= dup_threshold
+  uniques <- unique_muts$copies[sel] < dup_threshold
+  orf_stats <- rbind(orf_stats, 
+                     list(name, sum(dups), sum(uniques), null_effect))
+}
+
+names(orf_stats) <- c('name', 'num_dups', 'num_unique', 'null_effect')
+
+# Filter genes out with more than 4 duplicates.
+orf_stats <- orf_stats[orf_stats$num_dups == 0,]
+orf_stats <- orf_stats[order(orf_stats$num_unique, decreasing = TRUE),]
+write_csv(orf_stats, 'Promising ORFs.csv')
+```
+
+## Extract Unique ORFs in strain 2-1
+```{r}
+unique <- vars$orfs %in% orf_stats$name
+promising_orfs <- vars$orfs[unique]
+vars$orfs[unique]
+vars$null_effects[unique]
+
+
+```
+
+
+

@@ -1,0 +1,7 @@
+"0","for (i in seq_along(notable_genes$name)){
+  ind <- sel[i]
+  notable_genes$loc[i] <-  to_igv_coords(orf_df$chr[ind], orf_df$start[ind])
+}
+"
+"2","Error in sel : object 'sel' not found
+"

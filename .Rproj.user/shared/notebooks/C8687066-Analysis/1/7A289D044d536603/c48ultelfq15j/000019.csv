@@ -1,0 +1,7 @@
+"0","var_orfs <- data.frame(ORF=names(mut_counts),
+                       `# of Variants`=mut_counts,
+                       `mut_effect`=orf_df$null_effects[match(names(mut_counts)[1:5], orf_df$name)])
+"
+"2","Error in data.frame(ORF = names(mut_counts), `# of Variants` = mut_counts,  : 
+  arguments imply differing number of rows: 66, 5
+"
